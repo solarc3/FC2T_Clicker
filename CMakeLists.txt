@@ -16,6 +16,7 @@ include_directories(
 # Find the necessary packages
 #find_package(glfw3 REQUIRED)
 #find_package(Vulkan REQUIRED)
+#find_package(DirectX REQUIRED)
 
 # Add the source files you want to compile
 file(GLOB IMGUI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/imgui/*.cpp)
@@ -28,9 +29,11 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
  #       glfw
 #        Vulkan::Vulkan
-        d3d9
-        dwmapi
-#        opengl
+#        d3d9
+        d3d11
+       dwmapi
+       d3dcompiler
+#        dxgi
 #        # Add any additional libraries here
 )
 
