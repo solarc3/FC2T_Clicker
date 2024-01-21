@@ -12,7 +12,7 @@
 
 namespace menu {
     //using https://github.com/fantasy-cat/FC2T/blob/main/examples/imgui_vulkan/vulkan.hpp
-    void on_render(ImGuiIO & io );
+    void on_render(ImGuiIO & io, HWND hwnd );
     auto start(int height, int width,const wchar_t * name) -> bool; //required bool return, constant char for the name
 }
 

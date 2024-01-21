@@ -1,21 +1,54 @@
+#include <cstdio>
 #include "menu.h"
-void menu::on_render(ImGuiIO& io) {
-        static float f = 0.0f;
-        static int counter = 0;
+#include "fc2.hpp"
+void menu::on_render(ImGuiIO& io, HWND hwnd) {
+    RECT rect;
+    GetClientRect(hwnd, &rect);
+    ImVec2 size = ImVec2(static_cast<float>(rect.right - rect.left), static_cast<float>(rect.bottom - rect.top));
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(size);
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    ImGui::Begin("##NoTitle", nullptr, window_flags);
+    /* START CONFIG HERE */
+    static float f = 0.0f;
+    static int counter = 0;
+    ImGui::ShowDemoWindow();
+    if (ImGui::BeginTabBar("TabBars", ImGuiTabBarFlags_None)) {
+        if (ImGui::BeginTabItem("clicker")) {
+            // Content for Tab 1
 
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+            // Variables to hold the state
+            int currentKey = 0; // Replace with your actual key variable
+            const char* modes[] = { "Hold", "Click" ,"Toogle"};
+            int currentMode = 0; // 0 for Hold, 1 for Click
+            ImGui::Text("Keybind");
+            ImGui::Separator();
 
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+            // Input for the keybind
+            if (ImGui::Button("Press a key")) {
+                fc2::lua( "fantasy.log(\"Hello World\")" );
+            }
+            ImGui::SameLine(); // Continue on the same line
+            const char *options[] = {"Hold", "Toogle"};
+            static int current = 0;
+            if(ImGui::Combo("##NoTitle",&current,options,IM_ARRAYSIZE(options))){
+                    printf("Current selected: %s\n",options[current]);
+            }
+            ImGui::EndTabItem();
+        }
 
+        if (ImGui::BeginTabItem("stats")) {
+            // Content for Tab 2
+            ImGui::Text("This is the content of Tab 2");
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::EndTabItem();
+        }
 
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
+        // Continue adding tabs as needed
 
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
+        ImGui::EndTabBar();
+    }
+    ImGui::End();
+
 }
 

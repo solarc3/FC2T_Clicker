@@ -33,7 +33,19 @@ auto menu::start(int height, int width, const wchar_t *name) -> bool{
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
     ::RegisterClassExW(&wc);
-    HWND hwnd = ::CreateWindowW(wc.lpszClassName, name, WS_OVERLAPPEDWINDOW, width, height, 1280, 800, nullptr, nullptr, wc.hInstance, nullptr);
+    HWND hwnd = CreateWindowW(
+            wc.lpszClassName,        // Window class
+            name,        // Window text
+            WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX,     //window non-resizable, probably not the best way to handle it
+
+            // Size and position
+            width, height, 600, 400,
+
+            nullptr,       // Parent window
+            nullptr,       // Menu
+            wc.hInstance,  // Instance handle
+            nullptr        // Additional application data
+    );
     // as windows.h is used wchat_t is required for name
     // Initialize Direct3D
     if (!CreateDeviceD3D(hwnd))
@@ -112,7 +124,7 @@ auto menu::start(int height, int width, const wchar_t *name) -> bool{
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
         /***/
-        menu::on_render(io);
+        menu::on_render(io,hwnd);
         /***/
         // Rendering
         ImGui::Render();
