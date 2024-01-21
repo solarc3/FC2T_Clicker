@@ -1,7 +1,12 @@
 #include <cstdio>
 #include "menu.h"
-#include "fc2.hpp"
-void menu::on_render(ImGuiIO& io, HWND hwnd) {
+#include "../fc2.hpp"
+auto menu::on_render(ImGuiIO& io, HWND hwnd) -> void {
+    if( fc2::get_error() != FC2_TEAM_ERROR_NO_ERROR)
+    {
+        puts("Universe4 is not running or is unresponsive.");
+        std::exit( 1 );
+    }
     RECT rect;
     GetClientRect(hwnd, &rect);
     ImVec2 size = ImVec2(static_cast<float>(rect.right - rect.left), static_cast<float>(rect.bottom - rect.top));
@@ -41,6 +46,15 @@ void menu::on_render(ImGuiIO& io, HWND hwnd) {
             // Content for Tab 2
             ImGui::Text("This is the content of Tab 2");
 
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("FC2 config")){
+            ImGui::Text("member info dump");
+            ImGui::SameLine();
+            if(ImGui::Button("Info")){
+                auto output = fc2::api("getMember&protection&beautify");
+                std::puts( output.c_str() );
+            }
             ImGui::EndTabItem();
         }
 

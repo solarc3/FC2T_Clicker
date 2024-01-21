@@ -26,7 +26,9 @@ add_executable(${PROJECT_NAME}
         menu.cpp
         main.cpp
         clicker.cpp
-        fc2.hpp
+        ../fc2.hpp
+        checks.h
+        checks.cpp
 )
 
 # Link against the libraries you need here
