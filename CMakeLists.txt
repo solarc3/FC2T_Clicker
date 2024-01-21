@@ -21,8 +21,11 @@ include_directories(
 # Add the source files you want to compile
 file(GLOB IMGUI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/imgui/*.cpp)
 add_executable(${PROJECT_NAME}
-        main.cpp
         ${IMGUI_SOURCES}
+        dx11.cpp
+        menu.cpp
+        main.cpp
+        clicker.cpp
 )
 
 # Link against the libraries you need here
