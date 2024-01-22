@@ -6,7 +6,12 @@
 #define FC2T_CLICKER_CLICKER_H
 
 
-namespace clicker{}
+namespace clicker{
+    inline bool LeftClickerStatus = false;
+    inline int LeftTargetedCPS;
+    inline bool RightClickerStatus = false;
+    inline int RightTargetedCPS;
+}
 
 
 #endif //FC2T_CLICKER_CLICKER_H

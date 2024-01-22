@@ -14,33 +14,19 @@ include_directories(
 )
 
 # Find the necessary packages
-#find_package(glfw3 REQUIRED)
-#find_package(Vulkan REQUIRED)
-#find_package(DirectX REQUIRED)
-
+find_package(Vulkan REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+set(LIBRARIES "glfw;Vulkan::Vulkan")
 # Add the source files you want to compile
 file(GLOB IMGUI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/imgui/*.cpp)
 add_executable(${PROJECT_NAME}
         ${IMGUI_SOURCES}
-        dx11.cpp
-        menu.cpp
         main.cpp
+        menu.cpp
+        vulkan.cpp
         clicker.cpp
-        ../fc2.hpp
-        checks.h
         checks.cpp
 )
 
 # Link against the libraries you need here
-target_link_libraries(${PROJECT_NAME}
- #       glfw
-#        Vulkan::Vulkan
-#        d3d9
-        d3d11
-       dwmapi
-       d3dcompiler
-#        dxgi
-#        # Add any additional libraries here
-)
-
-# If ImGui requires any preprocessor definitions or compiler options, add them here
+target_link_libraries(FC2T_Clicker ${LIBRARIES} dwmapi)
