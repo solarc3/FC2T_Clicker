@@ -10,9 +10,9 @@
 #include <GLFW/glfw3.h>
 
 namespace menu {
-    //using https://github.com/fantasy-cat/FC2T/blob/main/examples/imgui_vulkan/vulkan.hpp
+    //https://github.com/fantasy-cat/FC2T/blob/main/examples/imgui_vulkan/vulkan.hpp
     auto on_render(ImGuiIO & io, GLFWwindow *window ) -> void;
-    auto start(int height_h, int width_w,const char * name) -> bool; //required bool return, constant char for the name
+    auto start(int height_h, int width_w,const char * name) -> bool;
+    void ShowHelpMarker(const char* desc);
 }
-
 #endif //FC2T_CLICKER_MENU_H
