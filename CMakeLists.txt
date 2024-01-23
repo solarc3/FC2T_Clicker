@@ -26,6 +26,8 @@ add_executable(${PROJECT_NAME}
         vulkan.cpp
         clicker.cpp
         checks.cpp
+        jitter.h
+        jitter.cpp
 )
 
 # Link against the libraries you need here

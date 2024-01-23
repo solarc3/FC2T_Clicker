@@ -22,6 +22,8 @@ namespace clicker{
     inline int LeftDropAmount;
     inline int RightDropAmount;
     //clicker config
+    inline int LeftClickerRange = 2;
+    inline int RightClickerRange = 2;
     inline bool LeftClickerStatus = false;
     inline int LeftTargetedCPS;
     inline bool RightClickerStatus = false;
