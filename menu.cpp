@@ -4,7 +4,7 @@
 #include "jitter.h"
 #include <GLFW/glfw3.h>
 
-void menu::ShowHelpMarker(const char* desc) {
+void menu::ShowHelpMarker(const char *desc) {
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered()) {
         ImGui::BeginTooltip();
@@ -14,7 +14,8 @@ void menu::ShowHelpMarker(const char* desc) {
         ImGui::EndTooltip();
     }
 }
-void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
+
+void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     ImVec2 size = ImVec2(static_cast<float>(width), static_cast<float>(height));
@@ -28,12 +29,11 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
     if (ImGui::BeginTabBar("TabBars", ImGuiTabBarFlags_None)) {
         if (ImGui::BeginTabItem("clicker")) {
             ImGui::SeparatorText("Clicker Config");
-            // Left Clicker Checkbox
             if (ImGui::Checkbox("Left mouse clicker", &clicker::LeftClickerStatus)) {
             }
             if (clicker::LeftClickerStatus) {
-                // Left Clicker Configuration
                 ImGui::Indent();
+                clicker::KeySelectionCombo("Left Clicker Key", clicker::Leftclickerkey);
                 ImGui::PushItemWidth(100);
                 ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 0, 20);
                 ImGui::SameLine();
@@ -54,9 +54,10 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
                     ImGui::SameLine();
                     menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
 
-                    ImGui::SliderInt("Spike amount#left", &clicker::LeftSpikeAmount, 0, 20);
+                    ImGui::SliderInt("Spike amount##left", &clicker::LeftSpikeAmount, 0, 20);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
+                    menu::ShowHelpMarker(
+                            "The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
                 }
                 ImGui::Separator();
                 if (ImGui::Checkbox("Drop##left", &clicker::LeftDrop)) {
@@ -69,7 +70,8 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
 
                     ImGui::SliderInt("Drop amount##left", &clicker::LeftDropAmount, 0, 20);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
+                    menu::ShowHelpMarker(
+                            "The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
                 }
                 ImGui::Unindent();
             }
@@ -77,6 +79,7 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
             }
             if (clicker::RightClickerStatus) {
                 ImGui::Indent();
+                clicker::KeySelectionCombo("Right Clicker Key", clicker::Rightclickerkey);
                 ImGui::PushItemWidth(100);
                 ImGui::SliderInt("Right CPS", &clicker::RightTargetedCPS, 0, 20);
                 ImGui::SameLine();
@@ -98,7 +101,8 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
                     menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
                     ImGui::SliderInt("Spike amount##right", &clicker::RightSpikeAmount, 0, 20);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
+                    menu::ShowHelpMarker(
+                            "The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
                 }
                 ImGui::Separator();
                 if (ImGui::Checkbox("Drop", &clicker::RightDrop)) {
@@ -111,9 +115,10 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
 
                     ImGui::SliderInt("Drop amount##right", &clicker::RightDropAmount, 0, 20);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
+                    menu::ShowHelpMarker(
+                            "The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
                 }
-            ImGui::Unindent();
+                ImGui::Unindent();
             }
             ImGui::SeparatorText("Jitter Config");
             //add jitter config
@@ -125,7 +130,8 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
                 ImGui::PushItemWidth(100);
                 ImGui::SliderInt("Intensity##left", &jitter::LeftJitterAmount, 0, 20);
                 ImGui::SameLine();
-                menu::ShowHelpMarker("The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
+                menu::ShowHelpMarker(
+                        "The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
                 ImGui::Separator();
                 ImGui::Unindent();
 
@@ -138,7 +144,8 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
                 ImGui::PushItemWidth(100);
                 ImGui::SliderInt("Intensity##right", &jitter::RightJitterAmount, 0, 20);
                 ImGui::SameLine();
-                menu::ShowHelpMarker("The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
+                menu::ShowHelpMarker(
+                        "The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
                 ImGui::Unindent();
             }
             ImGui::EndTabItem();
@@ -152,3 +159,4 @@ void menu::on_render(ImGuiIO& io, GLFWwindow* window) {
     }
     ImGui::End();
 }
+
