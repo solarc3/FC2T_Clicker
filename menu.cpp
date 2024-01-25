@@ -37,10 +37,10 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::PushItemWidth(100);
                 ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 0, 20);
                 ImGui::SameLine();
-                const char *options[] = {"Hold", "Toggle"};
-                static int current = 0;
-                if (ImGui::Combo("##ComboLeftClicker", &current, options, IM_ARRAYSIZE(options))) {
-                    printf("Current selected: %s\n", options[current]);
+
+                if (ImGui::Combo("##ComboLeftClicker", &clicker::current, clicker::options,
+                                 IM_ARRAYSIZE(clicker::options))) {
+                    printf("Current selected: %s\n", clicker::options[clicker::current]);
                 }
                 ImGui::SliderInt("Left Clicker Range", &clicker::LeftClickerRange, 0, 5);
                 ImGui::SameLine();

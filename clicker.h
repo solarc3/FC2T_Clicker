@@ -35,7 +35,10 @@ namespace clicker {
     inline unsigned int Leftclickerkey = 0x14;
     inline unsigned int Rightclickerkey;
 
-    void backgroundTask(unsigned int &keyHexValue);
+    inline const char *options[] = {"Hold", "Toggle"};
+    inline int current = 0;
+
+    void LeftBackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, bool &jitter);
 
     void startBackgroundTask(unsigned int &keyHexValue);
 
