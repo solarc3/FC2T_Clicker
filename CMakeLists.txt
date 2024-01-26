@@ -25,7 +25,6 @@ add_executable(${PROJECT_NAME}
         menu.cpp
         vulkan.cpp
         clicker.cpp
-        checks.cpp
         jitter.h
         jitter.cpp
 )

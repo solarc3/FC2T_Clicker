@@ -1,13 +1,10 @@
-//
-// Created by solar on 1/20/2024.
-//
-
 #ifndef FC2T_CLICKER_CLICKER_H
 #define FC2T_CLICKER_CLICKER_H
 
 #include <vector>
 #include <string>
 #include <utility>
+#include "../fc2.hpp"
 
 namespace clicker {
     //spike config
@@ -28,9 +25,9 @@ namespace clicker {
     inline int LeftClickerRange = 2;
     inline int RightClickerRange = 2;
     inline bool LeftClickerStatus = false;
-    inline int LeftTargetedCPS;
+    inline int LeftTargetedCPS = 1;
     inline bool RightClickerStatus = false;
-    inline int RightTargetedCPS;
+    inline int RightTargetedCPS = 1;
     //keybinds
     inline unsigned int Leftclickerkey = 0x14;
     inline unsigned int Rightclickerkey;
@@ -38,11 +35,15 @@ namespace clicker {
     inline const char *options[] = {"Hold", "Toggle"};
     inline int current = 0;
 
-    void LeftBackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, bool &jitter);
+    void BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, bool &jitter, int button);
 
-    void startBackgroundTask(unsigned int &keyHexValue);
+    void LeftBackgroundTask(unsigned int &keyHexValue, int code);
+    void RightBackgroundTask(unsigned int &keyHexValue, int code);
 
     void KeySelectionCombo(const char *combo_label, unsigned int &selectedKey);
+
+    void sendclick(int &targeted_cps, FC2_TEAM_MOUSE_CODE code);
+
 
     inline std::vector<std::pair<std::string, unsigned int>> keyMap = {
             {"VK_LBUTTON",    0x01},

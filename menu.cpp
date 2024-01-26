@@ -35,7 +35,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::Indent();
                 clicker::KeySelectionCombo("Left Clicker Key", clicker::Leftclickerkey);
                 ImGui::PushItemWidth(100);
-                ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 0, 20);
+                ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 1, 20);
                 ImGui::SameLine();
 
                 if (ImGui::Combo("##ComboLeftClicker", &clicker::current, clicker::options,
@@ -81,7 +81,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::Indent();
                 clicker::KeySelectionCombo("Right Clicker Key", clicker::Rightclickerkey);
                 ImGui::PushItemWidth(100);
-                ImGui::SliderInt("Right CPS", &clicker::RightTargetedCPS, 0, 20);
+                ImGui::SliderInt("Right CPS", &clicker::RightTargetedCPS, 1, 20);
                 ImGui::SameLine();
                 const char *rightOptions[] = {"Hold", "Toggle"};
                 static int rightCurrent = 0;
@@ -121,7 +121,6 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::Unindent();
             }
             ImGui::SeparatorText("Jitter Config");
-            //add jitter config
             if (ImGui::Checkbox("Left Jitter", &jitter::LeftJitter)) {
             }
             if (jitter::LeftJitter) {
@@ -153,6 +152,9 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
 
         if (ImGui::BeginTabItem("stats")) {
             ImGui::Text("TODO: Not part of the first release :("); //TODO: Add stats
+            if(ImGui::Button("setup fck")){
+                fc2::setup();
+            }
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

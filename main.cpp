@@ -6,9 +6,8 @@
 #include "clicker.h"
 
 int main() {
-    if (checks::protectionLevel()) {
-        clicker::startBackgroundTask(clicker::Leftclickerkey);
-        menu::start(400, 400, "FC2T_clicker");
-    }
+    clicker::LeftBackgroundTask(clicker::Leftclickerkey, 1);
+    clicker::RightBackgroundTask(clicker::Rightclickerkey, 0);
+    menu::start(400, 400, "FC2T_clicker");
     return 0;
 }
