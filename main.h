@@ -1,5 +1,0 @@
-#ifndef FC2T_CLICKER_MAIN_H
-#define FC2T_CLICKER_MAIN_H
-
-
-#endif //FC2T_CLICKER_MAIN_H

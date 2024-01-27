@@ -3,7 +3,6 @@
 #include "clicker.h"
 #include "jitter.h"
 #include <GLFW/glfw3.h>
-
 void menu::ShowHelpMarker(const char *desc) {
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered()) {
@@ -14,7 +13,6 @@ void menu::ShowHelpMarker(const char *desc) {
         ImGui::EndTooltip();
     }
 }
-
 void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -24,7 +22,6 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
                                     ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
                                     ImGuiWindowFlags_NoSavedSettings;
-
     ImGui::Begin("##NoTitle", nullptr, window_flags);
     if (ImGui::BeginTabBar("TabBars", ImGuiTabBarFlags_None)) {
         if (ImGui::BeginTabItem("clicker")) {
@@ -50,7 +47,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::Text("Spike Config");
                     ImGui::SliderInt("Spike chance##left", &clicker::LeftSpikeChance, 0, 100);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
+                    menu::ShowHelpMarker("The chance of the spike happening (%)");
 
                     ImGui::SliderInt("Spike amount##left", &clicker::LeftSpikeAmount, 0, 5);
                     ImGui::SameLine();
@@ -64,7 +61,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::Text("Drop Config");
                     ImGui::SliderInt("Drop chance##left", &clicker::LeftDropChance, 0, 100);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The chance of the drop happening in percent (%)");
+                    menu::ShowHelpMarker("The chance of the drop happening (%)");
 
                     ImGui::SliderInt("Drop amount##left", &clicker::LeftDropAmount, 0, 5);
                     ImGui::SameLine();
@@ -94,7 +91,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::Text("Spike Config");
                     ImGui::SliderInt("Spike chance##right", &clicker::RightSpikeChance, 0, 100);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
+                    menu::ShowHelpMarker("The chance of the spike happening (%)");
                     ImGui::SliderInt("Spike amount##right", &clicker::RightSpikeAmount, 0, 5);
                     ImGui::SameLine();
                     menu::ShowHelpMarker(
@@ -107,7 +104,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::Text("Drop Config");
                     ImGui::SliderInt("Drop chance##right", &clicker::RightDropChance, 0, 100);
                     ImGui::SameLine();
-                    menu::ShowHelpMarker("The chance of the drop happening in percent (%)");
+                    menu::ShowHelpMarker("The chance of the drop happening (%)");
 
                     ImGui::SliderInt("Drop amount##right", &clicker::RightDropAmount, 0, 5);
                     ImGui::SameLine();
@@ -132,7 +129,6 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 menu::ShowHelpMarker(
                         "The speed at which the jitter will happen, the lower the number the faster it will happen(ms)");
                 ImGui::Unindent();
-
             }
             if (ImGui::Checkbox("Right Jitter", &jitter::RightJitter)) {
             }
@@ -152,7 +148,6 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
             }
             ImGui::EndTabItem();
         }
-
         if (ImGui::BeginTabItem("misc")) {
             if(ImGui::Button("setup zombie/fc2k")){
                 fc2::setup();

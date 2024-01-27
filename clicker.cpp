@@ -2,12 +2,11 @@
 #include <iostream>
 #include "clicker.h"
 #include "imgui.h"
-#include "jitter.h"
 #include <windows.h>
 #include <random>
 #include <math.h>
-
 [[noreturn]] void clicker::BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, FC2_TEAM_MOUSE_CODE code) {
+    SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     static bool toggleState = false;
     static bool wasDown = false;
     while (true) {
@@ -29,22 +28,9 @@
                 }
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3));
     }
 }
-void clicker::LeftBackgroundTask() {
-    std::jthread bgThread([]() {BackgroundTask(clicker::Leftclickerkey, clicker::LeftClickerStatus, clicker::current, FC2_TEAM_MOUSE_LEFT);});
-    bgThread.detach();
-}
-void clicker::RightBackgroundTask() {
-    std::jthread bgThread([]() {BackgroundTask(clicker::Rightclickerkey, clicker::RightClickerStatus, clicker::rightCurrent, FC2_TEAM_MOUSE_RIGHT);});
-    bgThread.detach();
-}
-void clicker::updateCPSTask(){
-    std::jthread bgThread([]() {update(clicker::EventDuration, clicker::GlobalSleep);});
-    bgThread.detach();
-}
-
 void clicker::KeySelectionCombo(const char *combo_label, unsigned int &selectedKey) {
     std::string currentKeyString = "Select a key";
     for (const auto &key: clicker::keyMap) {
@@ -100,17 +86,13 @@ void timerSleep(double seconds) {
 void clicker::sendclick(FC2_TEAM_MOUSE_CODE code) {
     if (code == FC2_TEAM_MOUSE_LEFT){
         int cps = clicker::LeftcurrentCPS;
-        printf("Ding! cps is: %d\n", cps);
-        printf("Sleeping for: %f\n", 0.5 / cps);
-        fc2::input::down(FC2_TEAM_MOUSE_LEFT);
         timerSleep(0.5 / cps);//overkill maybe
-        fc2::input::up(FC2_TEAM_MOUSE_LEFT);
+        fc2::input::click(FC2_TEAM_MOUSE_LEFT);
     }
     if(code == FC2_TEAM_MOUSE_RIGHT){
         int cps = clicker::RightcurrentCPS;
-        fc2::input::down(FC2_TEAM_MOUSE_RIGHT);
         timerSleep(0.5 / cps);//overkill maybe
-        fc2::input::up(FC2_TEAM_MOUSE_RIGHT);
+        fc2::input::click(FC2_TEAM_MOUSE_RIGHT);
     }
 }
 void sleep(int seconds){
@@ -124,13 +106,10 @@ int rndCPS(int currentCPS, int clickerRange) {
     std::uniform_int_distribution<> dis(minCPS, maxCPS);
     return dis(gen);
 }
-
 [[noreturn]] void clicker::update(int &eventDuration, int &Sleep){
-    //probably the incorrect way to handle all of this, might need to redo
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1, 100);
-
     while (true) {
         clicker::LeftcurrentCPS = clicker::LeftTargetedCPS;
         clicker::RightcurrentCPS = clicker::RightTargetedCPS;
@@ -138,7 +117,6 @@ int rndCPS(int currentCPS, int clickerRange) {
             clicker::LeftcurrentCPS = clicker::LeftTargetedCPS + clicker::LeftSpikeAmount;
             sleep(eventDuration);
         }
-
         if (clicker::RightSpike && dis(gen) <= clicker::RightSpikeChance) {
             clicker::RightcurrentCPS = clicker::RightTargetedCPS + clicker::RightSpikeAmount;
             sleep(eventDuration);
@@ -147,7 +125,6 @@ int rndCPS(int currentCPS, int clickerRange) {
             clicker::LeftcurrentCPS = clicker::LeftTargetedCPS - clicker::LeftDropAmount;
             sleep(eventDuration);
         }
-
         if (clicker::RightDrop && dis(gen) <= clicker::RightDropChance) {
             clicker::RightcurrentCPS = clicker::RightTargetedCPS - clicker::RightDropAmount;
             sleep(eventDuration);
@@ -155,8 +132,20 @@ int rndCPS(int currentCPS, int clickerRange) {
         //even if any of the events are disabled the cps must be updated with its range
         clicker::LeftcurrentCPS = rndCPS(clicker::LeftcurrentCPS, clicker::LeftClickerRange);
         clicker::RightcurrentCPS = rndCPS(clicker::RightcurrentCPS, clicker::RightClickerRange);
-
         printf("Left cps: %d, Right cps: %d\n", clicker::LeftcurrentCPS, clicker::RightcurrentCPS);
         std::this_thread::sleep_for(std::chrono::milliseconds(Sleep));
     }
+}
+
+void clicker::LeftBackgroundTask() {
+    std::jthread bgThread1([]() {BackgroundTask(clicker::Leftclickerkey, clicker::LeftClickerStatus, clicker::current, FC2_TEAM_MOUSE_LEFT);});
+    bgThread1.detach();
+}
+void clicker::RightBackgroundTask() {
+    std::jthread bgThread2([]() {BackgroundTask(clicker::Rightclickerkey, clicker::RightClickerStatus, clicker::rightCurrent, FC2_TEAM_MOUSE_RIGHT);});
+    bgThread2.detach();
+}
+void clicker::updateCPSTask(){
+    std::jthread bgThread3([]() {update(clicker::EventDuration, clicker::GlobalSleep);});
+    bgThread3.detach();
 }
