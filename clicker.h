@@ -43,7 +43,7 @@ namespace clicker {
     inline int EventDuration = 5;
     inline int GlobalSleep = 300;
 
-    [[noreturn]] void BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, bool &jitter, FC2_TEAM_MOUSE_CODE code);
+    [[noreturn]] void BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, FC2_TEAM_MOUSE_CODE code);
 
     void LeftBackgroundTask();
     void RightBackgroundTask();

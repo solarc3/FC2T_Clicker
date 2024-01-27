@@ -128,6 +128,10 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 menu::ShowHelpMarker(
                         "The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
                 ImGui::Separator();
+                ImGui::SliderInt("Speed##left", &jitter::LeftJitterSpeed, 0, 100);
+                ImGui::SameLine();
+                menu::ShowHelpMarker(
+                        "The speed at which the jitter will happen, the lower the number the faster it will happen");
                 ImGui::Unindent();
 
             }
@@ -141,6 +145,10 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::SameLine();
                 menu::ShowHelpMarker(
                         "The amount of movement that will be added, the higher the number the more the screen will \"jump\" around");
+                ImGui::SliderInt("Speed##right", &jitter::RightJitterSpeed, 0, 100);
+                ImGui::SameLine();
+                menu::ShowHelpMarker(
+                        "The speed at which the jitter will happen, the lower the number the faster it will happen");
                 ImGui::Unindent();
             }
             ImGui::EndTabItem();

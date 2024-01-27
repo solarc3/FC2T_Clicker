@@ -8,8 +8,10 @@ namespace jitter{
     inline bool RightJitter;
     inline int LeftJitterAmount;
     inline int RightJitterAmount;
+    inline int LeftJitterSpeed;
+    inline int RightJitterSpeed;
 
-    [[noreturn]] void move(FC2_TEAM_MOUSE_CODE code, unsigned int &keyHexValue, int &current);
+    [[noreturn]] void move(FC2_TEAM_MOUSE_CODE code, unsigned int &keyHexValue, int &current, bool& status, int& speed);
     void LeftBackgroundTask();
     void RightBackgroundTask();
 

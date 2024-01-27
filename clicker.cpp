@@ -7,54 +7,37 @@
 #include <random>
 #include <math.h>
 
-[[noreturn]] void clicker::BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, bool &Jitter, FC2_TEAM_MOUSE_CODE code) {
+[[noreturn]] void clicker::BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, FC2_TEAM_MOUSE_CODE code) {
     static bool toggleState = false;
     static bool wasDown = false;
     while (true) {
         if (clickerStatus) {
             bool isKeyDown = (GetAsyncKeyState(keyHexValue) & 0x8000) != 0;
-            switch (current) {
-                case 1: // Toggle
-                    if (isKeyDown && !wasDown) {
-                        toggleState = !toggleState;
-                        wasDown = true;
-                    } else if (!isKeyDown && wasDown) {
-                        wasDown = false;
-                    }
-                    if (toggleState && Jitter) {
-                            clicker::sendclick(code);
-                            printf("i should be moving!!!");
-                            jitter::move(code, keyHexValue, current);
-                    }
-                    else {
-                        if(toggleState){
-                            clicker::sendclick(code);}
-                        break;
-                    }
-                break;
-                case 0: // Hold
-                    if (Jitter && isKeyDown) {
-                        clicker::sendclick(code);
-                        printf("i should be moving!!");
-                        jitter::move(code, keyHexValue, current);
-                    } else {
-                        if (isKeyDown) {
-                            clicker::sendclick(code);
-                        }
-                        break;
-                    }
-                break;
+            if (current == 1) { // Toggle mode
+                if (isKeyDown && !wasDown) {
+                    toggleState = !toggleState;
+                    wasDown = true;
+                } else if (!isKeyDown && wasDown) {
+                    wasDown = false;
+                }
+                if (toggleState) {
+                    clicker::sendclick(code);
+                }
+            } else if (current == 0) { // Hold mode
+                if (isKeyDown) {
+                    clicker::sendclick(code);
+                }
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 void clicker::LeftBackgroundTask() {
-    std::jthread bgThread([]() {BackgroundTask(clicker::Leftclickerkey, clicker::LeftClickerStatus, clicker::current, jitter::LeftJitter, FC2_TEAM_MOUSE_LEFT);});
+    std::jthread bgThread([]() {BackgroundTask(clicker::Leftclickerkey, clicker::LeftClickerStatus, clicker::current, FC2_TEAM_MOUSE_LEFT);});
     bgThread.detach();
 }
 void clicker::RightBackgroundTask() {
-    std::jthread bgThread([]() {BackgroundTask(clicker::Rightclickerkey, clicker::RightClickerStatus, clicker::rightCurrent, jitter::RightJitter, FC2_TEAM_MOUSE_RIGHT);});
+    std::jthread bgThread([]() {BackgroundTask(clicker::Rightclickerkey, clicker::RightClickerStatus, clicker::rightCurrent, FC2_TEAM_MOUSE_RIGHT);});
     bgThread.detach();
 }
 void clicker::updateCPSTask(){
