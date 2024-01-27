@@ -4,8 +4,7 @@
 
 int main() {
     clicker::updateCPSTask();
-    clicker::LeftBackgroundTask();
-    clicker::RightBackgroundTask();
+    clicker::BackgroundTask();
     jitter::LeftBackgroundTask();
     jitter::RightBackgroundTask();
     menu::start(400, 400, "FC2T_clicker");

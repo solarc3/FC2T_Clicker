@@ -29,7 +29,7 @@ namespace clicker {
     inline bool RightClickerStatus = false;
     inline int RightTargetedCPS = 1;
     //keybinds
-    inline unsigned int Leftclickerkey = 0x14;
+    inline unsigned int Leftclickerkey;
     inline unsigned int Rightclickerkey;
     inline const char *options[] = {"Hold", "Toggle"};
     inline int current = 0;
@@ -39,13 +39,12 @@ namespace clicker {
     inline int RightcurrentCPS;
     inline int EventDuration = 5;
     inline int GlobalSleep = 300;
-    [[noreturn]] void BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, FC2_TEAM_MOUSE_CODE code);
-    void LeftBackgroundTask();
-    void RightBackgroundTask();
+    [[noreturn]]void clicker(unsigned int &leftKeyHexValue, unsigned int &rightKeyHexValue, bool &leftClickerStatus,
+                                   bool &rightClickerStatus, int &leftCurrent, int &rightCurrent);    void BackgroundTask();
     void updateCPSTask();
     void KeySelectionCombo(const char *combo_label, unsigned int &selectedKey);
     [[noreturn]] void update(int &EventDuration, int &GlobalSleep);
-    void sendclick(FC2_TEAM_MOUSE_CODE code);
+    void sendclick(FC2_TEAM_MOUSE_CODE code, int cps);
     inline std::vector<std::pair<std::string, unsigned int>> keyMap = {
             {"LBUTTON",    0x01},
             {"RBUTTON",    0x02},
@@ -166,6 +165,7 @@ namespace clicker {
             {"LCONTROL",   0xA2},
             {"RCONTROL",   0xA3}
     };
+
 
 }
 

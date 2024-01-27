@@ -5,32 +5,44 @@
 #include <windows.h>
 #include <random>
 #include <math.h>
-[[noreturn]] void clicker::BackgroundTask(unsigned int &keyHexValue, bool &clickerStatus, int &current, FC2_TEAM_MOUSE_CODE code) {
+
+[[noreturn]] void clicker::clicker(unsigned int &leftKeyHexValue, unsigned int &rightKeyHexValue, bool &leftClickerStatus, bool &rightClickerStatus, int &leftCurrent, int &rightCurrent) {
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
-    static bool toggleState = false;
-    static bool wasDown = false;
+    static bool leftToggleState = false, rightToggleState = false;
+    static bool leftWasDown = false, rightWasDown = false;
     while (true) {
-        if (clickerStatus) {
-            bool isKeyDown = (GetAsyncKeyState(keyHexValue) & 0x8000) != 0;
-            if (current == 1) { // Toggle mode
-                if (isKeyDown && !wasDown) {
-                    toggleState = !toggleState;
-                    wasDown = true;
-                } else if (!isKeyDown && wasDown) {
-                    wasDown = false;
+        bool isLeftKeyDown = (GetAsyncKeyState(leftKeyHexValue) & 0x8000) != 0;
+        if (leftClickerStatus) {
+            if (leftCurrent == 1) { // Toggle
+                if (isLeftKeyDown && !leftWasDown) {
+                    leftToggleState = !leftToggleState;
+                    leftWasDown = true;
+                } else if (!isLeftKeyDown) {
+                    leftWasDown = false;
                 }
-                if (toggleState) {
-                    clicker::sendclick(code);
+            }
+            if ((leftCurrent == 1 && leftToggleState) || (leftCurrent == 0 && isLeftKeyDown)) {
+                clicker::sendclick(FC2_TEAM_MOUSE_LEFT, clicker::LeftcurrentCPS);
+            }
+        }
+        bool isRightKeyDown = (GetAsyncKeyState(rightKeyHexValue) & 0x8000) != 0;
+        if (rightClickerStatus) {
+            if (rightCurrent == 1) { // Toggle
+                if (isRightKeyDown && !rightWasDown) {
+                    rightToggleState = !rightToggleState;
+                    rightWasDown = true;
+                } else if (!isRightKeyDown) {
+                    rightWasDown = false;
                 }
-            } else if (current == 0) { // Hold mode
-                if (isKeyDown) {
-                    clicker::sendclick(code);
-                }
+            }
+            if ((rightCurrent == 1 && rightToggleState) || (rightCurrent == 0 && isRightKeyDown)) {
+                clicker::sendclick(FC2_TEAM_MOUSE_RIGHT, clicker::RightcurrentCPS);
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(3));
     }
 }
+
 void clicker::KeySelectionCombo(const char *combo_label, unsigned int &selectedKey) {
     std::string currentKeyString = "Select a key";
     for (const auto &key: clicker::keyMap) {
@@ -83,18 +95,12 @@ void timerSleep(double seconds) {
     auto start = high_resolution_clock::now();
     while ((high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }
-void clicker::sendclick(FC2_TEAM_MOUSE_CODE code) {
-    if (code == FC2_TEAM_MOUSE_LEFT){
-        int cps = clicker::LeftcurrentCPS;
-        timerSleep(0.5 / cps);//overkill maybe
-        fc2::input::click(FC2_TEAM_MOUSE_LEFT);
-    }
-    if(code == FC2_TEAM_MOUSE_RIGHT){
-        int cps = clicker::RightcurrentCPS;
-        timerSleep(0.5 / cps);//overkill maybe
-        fc2::input::click(FC2_TEAM_MOUSE_RIGHT);
-    }
+void clicker::sendclick(FC2_TEAM_MOUSE_CODE code, int cps) {
+    fc2::input::click(code);
+    timerSleep(0.5/cps);
+    printf("clicking code: %d with cps: %d\n", code , cps);
 }
+
 void sleep(int seconds){
     std::this_thread::sleep_for(std::chrono::seconds(seconds));
 }
@@ -123,10 +129,16 @@ int rndCPS(int currentCPS, int clickerRange) {
         }
         if (clicker::LeftDrop && dis(gen) <= clicker::LeftDropChance) {
             clicker::LeftcurrentCPS = clicker::LeftTargetedCPS - clicker::LeftDropAmount;
+            if(clicker::LeftcurrentCPS < 0){
+                clicker::LeftcurrentCPS = 1;
+            }
             sleep(eventDuration);
         }
         if (clicker::RightDrop && dis(gen) <= clicker::RightDropChance) {
             clicker::RightcurrentCPS = clicker::RightTargetedCPS - clicker::RightDropAmount;
+            if(clicker::RightcurrentCPS < 0){
+                clicker::RightcurrentCPS = 1;
+            }
             sleep(eventDuration);
         }
         //even if any of the events are disabled the cps must be updated with its range
@@ -137,15 +149,11 @@ int rndCPS(int currentCPS, int clickerRange) {
     }
 }
 
-void clicker::LeftBackgroundTask() {
-    std::jthread bgThread1([]() {BackgroundTask(clicker::Leftclickerkey, clicker::LeftClickerStatus, clicker::current, FC2_TEAM_MOUSE_LEFT);});
-    bgThread1.detach();
-}
-void clicker::RightBackgroundTask() {
-    std::jthread bgThread2([]() {BackgroundTask(clicker::Rightclickerkey, clicker::RightClickerStatus, clicker::rightCurrent, FC2_TEAM_MOUSE_RIGHT);});
-    bgThread2.detach();
-}
 void clicker::updateCPSTask(){
-    std::jthread bgThread3([]() {update(clicker::EventDuration, clicker::GlobalSleep);});
-    bgThread3.detach();
+    std::jthread bgThread([]() {update(clicker::EventDuration, clicker::GlobalSleep);});
+    bgThread.detach();
+}
+void clicker::BackgroundTask() {
+    std::jthread bgThread([]() {clicker(clicker::Leftclickerkey,clicker::Rightclickerkey, clicker::LeftClickerStatus,clicker::RightClickerStatus,clicker::current, clicker::rightCurrent);});
+    bgThread.detach();
 }
