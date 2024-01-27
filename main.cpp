@@ -1,13 +1,13 @@
-#include <thread>
-#include "main.h"
 #include "menu.h"
-#include "checks.h"
-#include "../fc2.hpp"
 #include "clicker.h"
+#include "jitter.h"
 
 int main() {
-    clicker::LeftBackgroundTask(clicker::Leftclickerkey, 1);
-    clicker::RightBackgroundTask(clicker::Rightclickerkey, 0);
+    clicker::updateCPSTask();
+    clicker::LeftBackgroundTask();
+    clicker::RightBackgroundTask();
+    jitter::LeftBackgroundTask();
+    jitter::RightBackgroundTask();
     menu::start(400, 400, "FC2T_clicker");
     return 0;
 }

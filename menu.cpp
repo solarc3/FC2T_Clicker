@@ -35,12 +35,10 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::Indent();
                 clicker::KeySelectionCombo("Left Clicker Key", clicker::Leftclickerkey);
                 ImGui::PushItemWidth(100);
-                ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 1, 20);
+                ImGui::SliderInt("Left CPS", &clicker::LeftTargetedCPS, 1, 15);
                 ImGui::SameLine();
-
                 if (ImGui::Combo("##ComboLeftClicker", &clicker::current, clicker::options,
                                  IM_ARRAYSIZE(clicker::options))) {
-                    printf("Current selected: %s\n", clicker::options[clicker::current]);
                 }
                 ImGui::SliderInt("Left Clicker Range", &clicker::LeftClickerRange, 0, 5);
                 ImGui::SameLine();
@@ -54,7 +52,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::SameLine();
                     menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
 
-                    ImGui::SliderInt("Spike amount##left", &clicker::LeftSpikeAmount, 0, 20);
+                    ImGui::SliderInt("Spike amount##left", &clicker::LeftSpikeAmount, 0, 5);
                     ImGui::SameLine();
                     menu::ShowHelpMarker(
                             "The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
@@ -68,7 +66,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::SameLine();
                     menu::ShowHelpMarker("The chance of the drop happening in percent (%)");
 
-                    ImGui::SliderInt("Drop amount##left", &clicker::LeftDropAmount, 0, 20);
+                    ImGui::SliderInt("Drop amount##left", &clicker::LeftDropAmount, 0, 5);
                     ImGui::SameLine();
                     menu::ShowHelpMarker(
                             "The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
@@ -81,12 +79,10 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                 ImGui::Indent();
                 clicker::KeySelectionCombo("Right Clicker Key", clicker::Rightclickerkey);
                 ImGui::PushItemWidth(100);
-                ImGui::SliderInt("Right CPS", &clicker::RightTargetedCPS, 1, 20);
+                ImGui::SliderInt("Right CPS", &clicker::RightTargetedCPS, 1, 15);
                 ImGui::SameLine();
-                const char *rightOptions[] = {"Hold", "Toggle"};
-                static int rightCurrent = 0;
-                if (ImGui::Combo("##ComboRightClicker", &rightCurrent, rightOptions, IM_ARRAYSIZE(rightOptions))) {
-                    printf("Current selected: %s\n", rightOptions[rightCurrent]);
+
+                if (ImGui::Combo("##ComboRightClicker", &clicker::rightCurrent, clicker::rightOptions, IM_ARRAYSIZE(clicker::rightOptions))) {
                 }
                 ImGui::SliderInt("Right Clicker Range", &clicker::RightClickerRange, 0, 5);
                 ImGui::SameLine();
@@ -99,7 +95,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::SliderInt("Spike chance##right", &clicker::RightSpikeChance, 0, 100);
                     ImGui::SameLine();
                     menu::ShowHelpMarker("The chance of the spike happening in percent (%)");
-                    ImGui::SliderInt("Spike amount##right", &clicker::RightSpikeAmount, 0, 20);
+                    ImGui::SliderInt("Spike amount##right", &clicker::RightSpikeAmount, 0, 5);
                     ImGui::SameLine();
                     menu::ShowHelpMarker(
                             "The amount of clicks per second (CPS) that will be added to the CPS when the spike happens");
@@ -113,7 +109,7 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
                     ImGui::SameLine();
                     menu::ShowHelpMarker("The chance of the drop happening in percent (%)");
 
-                    ImGui::SliderInt("Drop amount##right", &clicker::RightDropAmount, 0, 20);
+                    ImGui::SliderInt("Drop amount##right", &clicker::RightDropAmount, 0, 5);
                     ImGui::SameLine();
                     menu::ShowHelpMarker(
                             "The amount of clicks per second (CPS) that will be removed from the CPS when the drop happens");
@@ -150,10 +146,22 @@ void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
             ImGui::EndTabItem();
         }
 
-        if (ImGui::BeginTabItem("stats")) {
-            ImGui::Text("TODO: Not part of the first release :("); //TODO: Add stats
-            if(ImGui::Button("setup fck")){
+        if (ImGui::BeginTabItem("misc")) {
+            if(ImGui::Button("setup zombie/fc2k")){
                 fc2::setup();
+            }
+            ImGui::PushItemWidth(130);
+            ImGui::InputInt("Jitter/Drop duration", &clicker::EventDuration);
+            ImGui::SameLine();
+            menu::ShowHelpMarker("The duration of the event in seconds\ndefault is 5s");
+            if (clicker::EventDuration < 0) {
+                clicker::EventDuration = 0;
+            }
+            ImGui::InputInt("Global update time", &clicker::GlobalSleep);
+            ImGui::SameLine();
+            menu::ShowHelpMarker("This will hold updating the CPS for its duration\ndefault is 300ms");
+            if (clicker::GlobalSleep < 0) {
+                clicker::GlobalSleep = 0;
             }
             ImGui::EndTabItem();
         }
