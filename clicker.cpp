@@ -96,9 +96,9 @@ void timerSleep(double seconds) {
     while ((high_resolution_clock::now() - start).count() / 1e9 < seconds);
 }
 void clicker::sendclick(FC2_TEAM_MOUSE_CODE code, int cps) {
-    fc2::input::click(code);
+    fc2::input::down(code);
     timerSleep(0.5/cps);
-    printf("clicking code: %d with cps: %d\n", code , cps);
+    fc2::input::up(code);
 }
 
 void sleep(int seconds){
