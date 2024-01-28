@@ -120,11 +120,14 @@ int rndCPS(int currentCPS, int clickerRange) {
         clicker::LeftcurrentCPS = clicker::LeftTargetedCPS;
         clicker::RightcurrentCPS = clicker::RightTargetedCPS;
         if (clicker::LeftSpike && dis(gen) <= clicker::LeftSpikeChance) {
+
             clicker::LeftcurrentCPS = clicker::LeftTargetedCPS + clicker::LeftSpikeAmount;
+            printf("Left spike!, new cps is: %d, sleeping for %d", clicker::LeftcurrentCPS, eventDuration);
             sleep(eventDuration);
         }
         if (clicker::RightSpike && dis(gen) <= clicker::RightSpikeChance) {
             clicker::RightcurrentCPS = clicker::RightTargetedCPS + clicker::RightSpikeAmount;
+            printf("Right spike!, new cps is: %d, sleeping for %d", clicker::RightcurrentCPS, eventDuration);
             sleep(eventDuration);
         }
         if (clicker::LeftDrop && dis(gen) <= clicker::LeftDropChance) {
@@ -132,6 +135,7 @@ int rndCPS(int currentCPS, int clickerRange) {
             if(clicker::LeftcurrentCPS < 0){
                 clicker::LeftcurrentCPS = 1;
             }
+            printf("Left drop!, new cps is: %d, sleeping for %d", clicker::LeftcurrentCPS, eventDuration);
             sleep(eventDuration);
         }
         if (clicker::RightDrop && dis(gen) <= clicker::RightDropChance) {
@@ -139,6 +143,7 @@ int rndCPS(int currentCPS, int clickerRange) {
             if(clicker::RightcurrentCPS < 0){
                 clicker::RightcurrentCPS = 1;
             }
+            printf("Right drop!, new cps is: %d, sleeping for %d", clicker::RightcurrentCPS, eventDuration);
             sleep(eventDuration);
         }
         //even if any of the events are disabled the cps must be updated with its range
