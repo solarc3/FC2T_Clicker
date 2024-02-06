@@ -7,6 +7,6 @@ int main() {
     clicker::BackgroundTask();
     jitter::LeftBackgroundTask();
     jitter::RightBackgroundTask();
-    menu::start(400, 400, "FC2T_clicker");
+    menu::start(400, 400, L"FC2T_clicker");
     return 0;
 }

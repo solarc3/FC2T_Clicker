@@ -2,7 +2,6 @@
 #include "menu.h"
 #include "clicker.h"
 #include "jitter.h"
-#include <GLFW/glfw3.h>
 void menu::ShowHelpMarker(const char *desc) {
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered()) {
@@ -13,15 +12,13 @@ void menu::ShowHelpMarker(const char *desc) {
         ImGui::EndTooltip();
     }
 }
-void menu::on_render(ImGuiIO &io, GLFWwindow *window) {
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    ImVec2 size = ImVec2(static_cast<float>(width), static_cast<float>(height));
+void menu::on_render(ImGuiIO &io, HWND hwnd) {
+    RECT rect;
+    GetClientRect(hwnd, &rect);
+    ImVec2 size = ImVec2(static_cast<float>(rect.right - rect.left), static_cast<float>(rect.bottom - rect.top));
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(size);
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-                                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
-                                    ImGuiWindowFlags_NoSavedSettings;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     ImGui::Begin("##NoTitle", nullptr, window_flags);
     if (ImGui::BeginTabBar("TabBars", ImGuiTabBarFlags_None)) {
         if (ImGui::BeginTabItem("clicker")) {

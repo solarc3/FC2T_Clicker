@@ -8,13 +8,12 @@
 #include "imgui.h"
 #include <d3d11.h>
 #include <tchar.h>
-#include <GLFW/glfw3.h>
 
 namespace menu {
     //https://github.com/fantasy-cat/FC2T/blob/main/examples/imgui_vulkan/vulkan.hpp
-    auto on_render(ImGuiIO &io, GLFWwindow *window) -> void;
+    auto on_render(ImGuiIO &io, HWND window) -> void;
 
-    auto start(int height_h, int width_w, const char *name) -> bool;
+    auto start(int height_h, int width_w, const wchar_t *name) -> bool;
 
     void ShowHelpMarker(const char *desc);
 }
