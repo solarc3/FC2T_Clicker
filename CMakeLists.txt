@@ -5,7 +5,6 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui
 )
-find_package(Vulkan REQUIRED)
 file(GLOB IMGUI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/imgui/*.cpp)
 add_executable(${PROJECT_NAME}
         ${IMGUI_SOURCES}
